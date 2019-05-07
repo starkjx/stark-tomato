@@ -1,10 +1,62 @@
 import * as React from 'react';
+import { Input, Icon, Button } from 'antd';
+import axios from 'src/config/axios';
+import { Link } from 'react-router-dom';
+import './Login.scss'
 
-class Login extends React.Component{
+interface ILoginState {
+  account: string,
+  password: string
+}
+
+class Login extends React.Component<any, ILoginState>{
+  constructor(props){
+    super(props);
+    this.state = {
+      account: '',
+      password: ''
+    }
+    // this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onChange = (key: keyof ILoginState, value: string)=>{
+    const newState = {};
+    newState[key] = value;
+    this.setState(newState);
+  }
+
+  onSubmit = async()=>{
+    const{ account, password} = this.state;
+    try{
+      await axios.post('sign_in/user',{
+        account,
+        password
+      })
+      this.props.history.push('/');
+      console.log('success');
+    }catch (e) {
+      throw new Error(e)
+    }
+  }
   render(){
+    const{ account, password} = this.state;
     return (
-      <div className="Login">
-        Login
+      <div className="Login" id="Login">
+        <h1>Stark tomato登录</h1>
+        <Input
+          placeholder="请输入你的用户名"
+          prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+          value={account}
+          onChange={(e) => this.onChange('account', e.target.value)}
+        />
+        <Input.Password
+          value={password}
+          placeholder="请输入密码"
+          onChange={(e) => this.onChange('password', e.target.value)}
+        />
+        <Button type="primary" className="LoginButton" onClick={this.onSubmit}>登录</Button>
+        <p>没有账号？请点击<Link to="/signup">注册</Link></p>
       </div>
     )
   };
