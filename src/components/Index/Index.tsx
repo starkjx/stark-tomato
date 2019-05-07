@@ -12,7 +12,7 @@ class Index extends React.Component<IRouter>{
   }
 
   login(){
-    this.props.history.push('/login');
+    this.props.history.push('login');
   }
   render(){
     return (
