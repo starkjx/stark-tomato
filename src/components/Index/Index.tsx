@@ -1,6 +1,9 @@
 import * as React from 'react';
-import {Button} from 'antd';
+import { Dropdown, Icon, Menu} from 'antd';
+import Todos from 'src/components/Todos/Todos';
 import axios from 'src/config/axios';
+import history from 'src/config/history';
+import './Index.scss';
 
 interface IRouter {
   history: any;
@@ -9,13 +12,26 @@ interface IIndexState {
   user: any;
 }
 
+const Logout = ()=>{
+  localStorage.setItem('x-token', '');
+  history.push('/login')
+}
+
+// onClick={handleMenuClick}
+const menu = (
+  <Menu >
+    <Menu.Item key="1"><Icon type="user" />个人设置</Menu.Item>
+    <Menu.Item key="2" onClick={Logout}><Icon type="logout" />注销</Menu.Item>
+  </Menu>
+);
+
+
 class Index extends React.Component<IRouter, IIndexState>{
   constructor(props){
     super(props);
     this.state = {
       user: {}
     };
-    this.Logout = this.Logout.bind(this);
   }
   async componentWillMount(){
     await  this.getMe();
@@ -26,16 +42,22 @@ class Index extends React.Component<IRouter, IIndexState>{
         user: response.data
       });
   }
-  Logout = ()=>{
-    localStorage.setItem('x-token', '');
-    this.props.history.push('/login')
-  }
 
   render(){
     return (
-      <div className="Index">
-        <p>欢迎,{this.state.user.account}</p>
-        <Button onClick={this.Logout}>登出</Button>
+      <div className="Index" id="Index">
+        <header>
+          <span className="logo">Stark tomato</span>
+          <Dropdown className="userOptions" overlay={menu}>
+            <span >
+              {this.state.user && this.state.user.account}
+              <Icon type="down"  style={{marginLeft: 8}}/>
+            </span>
+          </Dropdown>
+        </header>
+        <main>
+          <Todos/>
+        </main>
       </div>
     )
   };
