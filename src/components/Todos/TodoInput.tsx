@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from '../../redux/actions';
+import { addTodo } from '../../redux/actions/todosActions';
 import { Input } from 'antd';
 import axios from '../../config/axios';
 

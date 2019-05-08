@@ -7,3 +7,4 @@ export const EDIT_TODO = 'EDIT_TODO';
 
 
 export const ADD_TOMATO = 'ADD_TOMATO';
+export const INIT_TOMATOES = 'INIT_TOMATOES';
