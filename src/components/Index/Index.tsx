@@ -21,15 +21,10 @@ class Index extends React.Component<IRouter, IIndexState>{
     await  this.getMe();
   }
   getMe = async ()=>{
-    try{
       const response = await axios.get("me")
       this.setState({
         user: response.data
-      })
-      // console.log(response);
-    }catch (e) {
-      // console.log(e);
-    }
+      });
   }
   Logout = ()=>{
     localStorage.setItem('x-token', '');
