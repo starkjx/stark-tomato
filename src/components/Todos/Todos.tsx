@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { addTodo } from "../../redux/actions";
 import TodoInput from './TodoInput';
 import TodoItem from './TodoItem';
 import axios from '../../config/axios';
@@ -26,18 +28,18 @@ class Todos extends React.Component<any, ITodosState>{
     return this.unDeletedTodos.filter(elem => elem.completed)
   }
 
-  addTodo = async (params: any) =>{
-    const {todos} = this.state;
-    try{
-      const response = await axios.post('todos', params)
-      // console.log(response.data);
-      this.setState({
-        todos: [response.data.resource,...todos]
-      });
-    }catch (e) {
-      throw new Error(e)
-    }
-  }
+  // addTodo = async (params: any) =>{
+  //   const {todos} = this.state;
+  //   try{
+  //     const response = await axios.post('todos', params)
+  //     // console.log(response.data);
+  //     this.setState({
+  //       todos: [response.data.resource,...todos]
+  //     });
+  //   }catch (e) {
+  //     throw new Error(e)
+  //   }
+  // }
   getTodos = async ()=>{
     try{
       const response = await axios.get('todos');
@@ -87,7 +89,7 @@ class Todos extends React.Component<any, ITodosState>{
   render(){
     return (
       <div className="Todos" id="Todos">
-        <TodoInput addTodo={(params)=>this.addTodo(params)}/>
+        <TodoInput/>
         <div className="todoLists">
           {
             this.unCompletedTodos.map( elem => {
@@ -113,4 +115,12 @@ class Todos extends React.Component<any, ITodosState>{
   }
 }
 
-export default Todos;
+const mapStateToProps = (state, ownProps) =>({
+  todos: state.todos,
+  ...ownProps
+});
+const mapDispatchToProps = {
+  addTodo
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(Todos);
