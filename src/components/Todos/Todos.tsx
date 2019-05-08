@@ -1,21 +1,78 @@
 import * as React from 'react';
 import TodoInput from './TodoInput';
+import TodoItem from './TodoItem';
 import axios from '../../config/axios';
 import './Todos.scss';
 
-class Todos extends React.Component{
+interface ITodosState {
+  todos: any[];
+}
+
+class Todos extends React.Component<any, ITodosState>{
+  constructor(props){
+    super(props);
+    this.state = {
+      todos: []
+    };
+  }
   addTodo = async (params: any) =>{
+    const {todos} = this.state;
     try{
       const response = await axios.post('todos', params)
-      console.log(response.data);
+      // console.log(response.data);
+      this.setState({
+        todos: [response.data.resource,...todos]
+      });
     }catch (e) {
       throw new Error(e)
     }
+  }
+  getTodos = async ()=>{
+    try{
+      const response = await axios.get('todos');
+      // console.log(response.data);
+      this.setState({
+        todos: response.data.resources
+      });
+    }catch (e) {
+      throw new Error(e);
+    }
+  }
+  updateTodo = async (id: number, params: any) =>{
+    const {todos} = this.state;
+    try{
+      const response = await axios.put(`todos/${id}`, params)
+      const newTodos = todos.map(elem =>{
+        if(id === elem.id){
+          return response.data.resource;
+        }else {
+          return elem;
+        }
+      });
+      this.setState({
+        todos: newTodos
+      });
+    }catch (e) {
+      throw new Error(e);
+    }
+  }
+  componentDidMount(){
+    this.getTodos()
   }
   render(){
     return (
       <div className="Todos" id="Todos">
         <TodoInput addTodo={(params)=>this.addTodo(params)}/>
+        <main>
+          {
+            this.state.todos.map( elem => {
+              return <TodoItem 
+                key={elem.id}
+                update={this.updateTodo}
+                {...elem}/>
+            })
+          }
+        </main>
       </div>
     )
   }
