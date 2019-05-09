@@ -1,14 +1,15 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import axios from "../../config/axios";
-import {addTomato, initTomatoes} from '../../redux/actions/tomatoesActions';
-import TomatoBegin from './TomatoBegin'
+import {addTomato, initTomatoes, updateTomato} from '../../redux/actions/tomatoesActions';
+import TomatoBegin from './TomatoBegin';
 import './Tomatoes.scss';
 
 interface ITomatoesProps {
   addTomato: (payload: any) => any;
   tomatoes: any[];
-  unfinishedTomato: any;
+  initTomatoes: (payload: any[]) => any;
+  updateTomato: (payload: any) => any;
 }
 
 class Tomatoes extends React.Component<ITomatoesProps>{
@@ -16,14 +17,14 @@ class Tomatoes extends React.Component<ITomatoesProps>{
     super(props);
   }
 
-  get unfinishedTomatoes(){
+  get unfinishedTomato(){
     return this.props.tomatoes.filter(
-      elem => !elem.description && !elem.ended_at)[0];
+      elem => !elem.description && !elem.ended_at && !elem.aborted)[0]
   }
-  getToamtoes = async ()=>{
+  getTomatoes = async ()=>{
     try{
-      const response =await axios.get('tomatoes');
-      console.log(response.data);
+      const response = await axios.get('tomatoes');
+      this.props.initTomatoes(response.data.resources);
     }catch (e) {
       throw new Error(e);
     }
@@ -32,21 +33,24 @@ class Tomatoes extends React.Component<ITomatoesProps>{
   startTomato = async () =>{
     try{
       const response = await axios.post(
-        'tomatoes',
-        {duration: 1500000});
+        'tomatoes', {duration: 1500000});
       this.props.addTomato(response.data.resource);
     }catch (e) {
       throw new Error(e);
     }
   }
   componentDidMount(){
-    this.getToamtoes()
+    this.getTomatoes()
   }
 
   render(){
     return (
       <div className="Tomatoes" id="Tomatoes">
-        <TomatoBegin startTomato={this.startTomato} unfinishedTomato={this.unfinishedTomatoes}/>
+        <TomatoBegin
+          startTomato={this.startTomato}
+          unfinishedTomato={this.unfinishedTomato}
+          updateTomato={this.props.updateTomato}
+        />
       </div>
     )
   };
@@ -58,7 +62,8 @@ const mapStateToProps = (state, ownProps) =>({
 });
 const mapDispatchToProps = {
   addTomato,
-  initTomatoes
+  initTomatoes,
+  updateTomato
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(Tomatoes);
