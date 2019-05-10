@@ -48,13 +48,6 @@ class Todos extends React.Component<any>{
                 {...elem}/>
             })
           }
-          {
-            this.completedTodos.map( elem => {
-              return <TodoItem
-                key={elem.id}
-                {...elem}/>
-            })
-          }
         </div>
       </div>
     )
