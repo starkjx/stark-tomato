@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import Polygon from './Polygon';
 import {format} from 'date-fns';
 import _ from 'lodash';
+import TodoHistory from "./TodoHistory/TodoHistory";
 import './Statistics.scss';
 
 interface IStatisticsProps {
@@ -41,6 +42,7 @@ class Statistics extends React.Component<IStatisticsProps>{
                      totalFinishedCount={this.finishedTodos.length}/>
           </li>
         </ul>
+        <TodoHistory/>
       </div>
     )
   }

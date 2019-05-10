@@ -28,10 +28,9 @@ class Tomatoes extends React.Component<ITomatoesProps>{
     const finishedTomatoes = this.props.tomatoes.filter(
       elem => elem.description && elem.ended_at && !elem.aborted
     );
-    const obj = _.groupBy(finishedTomatoes,(tomato)=>{
+    return  _.groupBy(finishedTomatoes,(tomato)=>{
       return format(tomato.started_at, 'YYYY-MM-D');
     });
-    return obj;
   }
 
   startTomato = async () =>{
