@@ -1,10 +1,12 @@
 import {ADD_TOMATO, INIT_TOMATOES, UPDATE_TOMATO} from "../actionTypes";
 
-export default (state: any[]=[], action: any):any => {
-  switch ((action.type)) {
+export default (state: any[]=[], action) => {
+  switch (action.type) {
     case ADD_TOMATO:
       return [action.payload, ...state];
     case INIT_TOMATOES:
+      return [...action.payload];
+    case UPDATE_TOMATO:
       return state.map(elem =>{
         if(elem.id === action.payload.id){
           return action.payload;
@@ -12,8 +14,7 @@ export default (state: any[]=[], action: any):any => {
           return elem;
         }
       });
-    case UPDATE_TOMATO:
-      return [action.payload, ...state];
-    default: return state;
+    default:
+      return state;
   }
 }

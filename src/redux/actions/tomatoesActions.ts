@@ -14,9 +14,9 @@ export const initTomatoes = (payload: any[]) =>{
   }
 };
 
-export const updateTomato = (payload: any[]) =>{
+export const updateTomato = (payload: any) =>{
   return {
     type: UPDATE_TOMATO,
     payload
   }
-}
+};

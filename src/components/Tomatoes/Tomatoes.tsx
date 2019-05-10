@@ -7,14 +7,17 @@ import './Tomatoes.scss';
 
 interface ITomatoesProps {
   addTomato: (payload: any) => any;
-  tomatoes: any[];
   initTomatoes: (payload: any[]) => any;
   updateTomato: (payload: any) => any;
+  tomatoes: any[];
 }
 
 class Tomatoes extends React.Component<ITomatoesProps>{
   constructor(props){
     super(props);
+  }
+  componentDidMount(){
+    this.getTomatoes()
   }
 
   get unfinishedTomato(){
@@ -39,9 +42,6 @@ class Tomatoes extends React.Component<ITomatoesProps>{
       throw new Error(e);
     }
   }
-  componentDidMount(){
-    this.getTomatoes()
-  }
 
   render(){
     return (
@@ -62,8 +62,8 @@ const mapStateToProps = (state, ownProps) =>({
 });
 const mapDispatchToProps = {
   addTomato,
-  initTomatoes,
-  updateTomato
+  updateTomato,
+  initTomatoes
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(Tomatoes);
